@@ -52,7 +52,8 @@ const FlatInventory = () => {
 
 const fetchFlats = async () => {
   try {
-    const res = await fetch("http://localhost:5000/api/flats");
+    // const res = await fetch("http://localhost:5000/api/flats");
+    const res = await fetch("/api/flats");
     let data = await res.json();
     const now = new Date();
 
@@ -136,7 +137,8 @@ const [formData, setFormData] = useState({
     } else {
       payload.holdUntil = null;
     }
-    const res = await fetch(`http://localhost:5000/api/flats/${selectedFlat.flatKey}`, {
+    const res = await fetch(`/api/flats/${selectedFlat.flatKey}`, {
+    // const res = await fetch(`http://localhost:5000/api/flats/${selectedFlat.flatKey}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
