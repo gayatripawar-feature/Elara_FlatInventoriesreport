@@ -60,7 +60,7 @@ const fetchFlats = async () => {
       if (f.status === "hold" && f.hold_until) {
         const holdUntil = new Date(f.hold_until);
         if (holdUntil < now) {
-          f.status = "unsold"; // expired
+          f.status = "unsold"; // for expired flats
           f.hold_until = null;
         }
       }
@@ -75,11 +75,9 @@ const fetchFlats = async () => {
         holdUntil: f.hold_until
       };
     });
-
-    setFlats(data);
+     setFlats(data);
     setFlatStatus(statusMap);
-
-  } catch (err) {
+   } catch (err) {
     console.error("Error fetching flats:", err);
   }
 };
@@ -87,11 +85,8 @@ const fetchFlats = async () => {
 useEffect(() => {
   fetchFlats(); // run on mount
     const interval = setInterval(fetchFlats, 10000);
-
-  return () => clearInterval(interval); // cleanup on unmount
+    return () => clearInterval(interval); // cleanup on unmount
 }, []);
-
-
 
   // ✅ Keep statuses in state (all flats start as unsold)
   const [flatStatus, setFlatStatus] = useState({});
@@ -102,65 +97,52 @@ useEffect(() => {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("md")); // Desktop screens
 const [toast, setToast] = useState({ open: false, message: "", severity: "success" });
-
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     date: "",
     status: "unsold",
     agreementvalue:" ",
     saleablearea:" ",
     cost:" ",
-
-  });
-
-  // Get flat key like "101A"
+});
+ // Get flat key like "101A"
   const getFlatKey = (flat, wingName) => flat + wingName.slice(-1);
-
-  // Status colors
+// Status colors
   const statusColors = {
     unsold: "#fff", // white
     sold: "#46e934ff", // green
     hold: "#fbf053ff", // yellow
     landowner: "#fd7d0dff", // orange
   };
-
-  // Handle Flat Click → Open Modal
+// Handle Flat Click → Open Modal
   const handleFlatClick = (flat, wing) => {
     const flatKey = getFlatKey(flat, wing);
     const currentStatus = flatStatus[flatKey]?.status || "unsold";
     const currentDate = flatStatus[flatKey]?.date || "";
-
     setSelectedFlat({ flat, wing, flatKey });
     setFormData({ status: currentStatus, date: currentDate });
     setOpenModal(true);
   };
-
-  // Save Flat Data
-  
-const handleSave = async () => {
+// Save Flat Data
+  const handleSave = async () => {
   if (!selectedFlat) return;
-
   try {
     let payload = { status: formData.status, date: formData.date };
-
-    if (formData.status === "hold") {
+     if (formData.status === "hold") {
       // const holdUntil = new Date(Date.now() + 60 * 1000); // 1 min hold
       const holdUntil = new Date(Date.now() + 60 * 60 * 1000); // 1 hour hold
-
       // Convert to local MySQL-friendly format
       const localDateTime = holdUntil.toLocaleString("sv-SE", { hour12: false }).replace(" ", "T");
       payload.holdUntil = localDateTime;
     } else {
       payload.holdUntil = null;
     }
-
     const res = await fetch(`http://localhost:5000/api/flats/${selectedFlat.flatKey}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
     const result = await res.json();
-
-    // Update state immediately so color changes
+   // Update state immediately so color changes
     setFlatStatus(prev => ({
       ...prev,
       [selectedFlat.flatKey]: {
@@ -169,10 +151,8 @@ const handleSave = async () => {
         holdUntil: payload.holdUntil
       }
     }));
-
-    setOpenModal(false);
-
-    setToast({
+  setOpenModal(false);
+  setToast({
       open: true,
       message: formData.status === "hold" ? "Flat put on hold for 1 hour!" : result.message,
       severity: formData.status === "hold" ? "info" : "success",

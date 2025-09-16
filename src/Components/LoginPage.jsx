@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 
 const LoginPage = ({ onLogin }) => {
@@ -12,21 +11,6 @@ const LoginPage = ({ onLogin }) => {
     { username: "employee", password: "employee123", role: "Employee" },
   ];
 
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-
-//     const foundUser = users.find(
-//       (u) => u.username === username && u.password === password
-//     );
-
-//     if (foundUser) {
-//       onLogin(foundUser.username, foundUser.role);
-//     } else {
-//       alert("Invalid username or password!");
-//     }
-//   };
-
-
 const handleSubmit = async (e) => {
   e.preventDefault();
 
@@ -36,9 +20,7 @@ const handleSubmit = async (e) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     });
-
-    const data = await response.json();
-
+      const data = await response.json();
     if (data.success) {
       onLogin(data.username, data.role);
     } else {
