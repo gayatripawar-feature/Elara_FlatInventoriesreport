@@ -1,1 +1,1 @@
-"/api/*   https://elara-flat-inventoriesreport-izatvucr8.vercel.app/   200" 
+/api/*   https://elara-flat-inventoriesreport-izatvucr8.vercel.app/api/:splat   200
