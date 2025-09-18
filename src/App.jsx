@@ -13,20 +13,8 @@ const App = () => {
   };
 
   return (
-    // <div>
-    //   {!isLoggedIn ? (
-    //     <LoginPage onLogin={handleLogin} />
-    //   ) : (
-    //     <MainPage user={user} />
-    //   )}
-    // </div>
-
-
-    
         <MainPage user={user} />
-    
-   
-  );
+     );
 };
 
 export default App;

@@ -7,20 +7,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-// app.use(cors());
-// app.use(cors({
-//   origin: [
-//     //  "https://elara-flat-inventory.netlify.app/"],
-//     "https://transcendent-unicorn-5d6a23.netlify.app"], 
-//      // frontend URLs
-//   methods: ["GET", "POST", "PUT"],
-//   credentials: true
-// }));
-app.use(cors({
-  origin: ["https://transcendent-centaur-5ba721.netlify.app"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
-}));
+app.use(cors());
+
 app.use(express.json());
 
 // Sample route
@@ -103,22 +91,22 @@ app.put('/api/flats/:flatKey', async (req, res) => {
 
 
 // To hold :
-app.put("/api/flats/:id", (req, res) => {
-  const flatKey = req.params.id;
-  const { status, date, holdUntil } = req.body;
+// app.put("/api/flats/:id", (req, res) => {
+//   const flatKey = req.params.id;
+//   const { status, date, holdUntil } = req.body;
 
-  console.log("Incoming update:", { flatKey, status, date, holdUntil });
+//   console.log("Incoming update:", { flatKey, status, date, holdUntil });
 
-  const sql = `
-    UPDATE flats 
-    SET status = ?, booking_date = ?, hold_until = ?, updated_at = CURRENT_TIMESTAMP
-    WHERE flat_key = ?
-  `;
+//   const sql = `
+//     UPDATE flats 
+//     SET status = ?, booking_date = ?, hold_until = ?, updated_at = CURRENT_TIMESTAMP
+//     WHERE flat_key = ?
+//   `;
 
-  db.run(sql, [status, date || null, holdUntil || null, flatKey], function (err) {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json({ message: "Flat updated successfully" });
-  });
-});
+//   db.run(sql, [status, date || null, holdUntil || null, flatKey], function (err) {
+//     if (err) return res.status(500).json({ error: err.message });
+//     res.json({ message: "Flat updated successfully" });
+//   });
+// });
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
